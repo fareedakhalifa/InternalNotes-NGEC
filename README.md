@@ -58,3 +58,44 @@ pprint(output)
                       'search_name': 'Guerrero',
                       'start_char': 89}]}
 ```
+
+❖ I have also added a new option to save the output into a csv file - if it is fed manually, if we feed it through an existing CSV, please check the other code (`demo_mordecai_FK3`)
+```
+import csv
+
+# Define the CSV headers
+csv_file = "output.csv"
+headers = [
+    'doc_text', 'name', 'lat', 'lon', 'country_code3', 'admin1_name',
+    'admin2_name', 'feature_code', 'start_char', 'end_char'
+]
+
+# Initialize the CSV file with headers if it doesn't already exist
+try:
+    with open(csv_file, mode='x', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=headers)
+        writer.writeheader()
+except FileExistsError:
+    # If the file exists, skip writing the header
+    pass
+
+# Function to add new rows for each processed doc_text
+def save_to_csv(output):
+    geolocated_ents = output.get('geolocated_ents', [])
+    with open(csv_file, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=headers)
+        for ent in geolocated_ents:
+            writer.writerow({
+                'doc_text': output['doc_text'],
+                'name': ent.get('name', ''),
+                'lat': ent.get('lat', ''),
+                'lon': ent.get('lon', ''),
+                'country_code3': ent.get('country_code3', ''),
+                'admin1_name': ent.get('admin1_name', ''),
+                'admin2_name': ent.get('admin2_name', ''),
+                'feature_code': ent.get('feature_code', ''),
+                'start_char': ent.get('start_char', ''),
+                'end_char': ent.get('end_char', ''),
+            })
+    print(f"Added to {csv_file}")
+```
