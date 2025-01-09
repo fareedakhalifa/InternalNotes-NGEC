@@ -1,4 +1,4 @@
-# Notes To Self for Using NGEC
+# Internal Notes for Using NGEC
 
 > When using the geoparser, ensure that an elastic search is run using `sudo docker run -d -p 127.0.0.1:9200:9200 -e "discovery.type=single-node" -v ./geonames_index/:/usr/share/elasticsearch/data elasticsearch:7.17.9`
 
